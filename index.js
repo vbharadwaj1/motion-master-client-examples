@@ -13,8 +13,11 @@ Object.assign(global, { WebSocket: require('ws') });
 const rxjs_1 = require("rxjs");
 const motion_master_client_1 = require("motion-master-client");
 const client = (0, motion_master_client_1.createMotionMasterClient)('192.168.1.112');
-client.reqResSocket.opened$.pipe((0, rxjs_1.first)(Boolean)).subscribe(() => __awaiter(void 0, void 0, void 0, function* () {
-    const message = yield (0, rxjs_1.firstValueFrom)(client.request.getSystemVersion(1000));
-    console.log(`System version is ${message === null || message === void 0 ? void 0 : message.version}`);
-    client.closeSockets();
-}));
+client.reqResSocket.opened$.pipe((0, rxjs_1.first)(Boolean)).subscribe(onOpened);
+function onOpened() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const message = yield (0, rxjs_1.firstValueFrom)(client.request.getSystemVersion(1000));
+        console.log(`System version is ${message === null || message === void 0 ? void 0 : message.version}`);
+        client.closeSockets();
+    });
+}
