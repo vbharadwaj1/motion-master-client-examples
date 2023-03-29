@@ -9,10 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require('dotenv').config();
 Object.assign(global, { WebSocket: require('ws') });
 const rxjs_1 = require("rxjs");
 const motion_master_client_1 = require("motion-master-client");
-const client = (0, motion_master_client_1.createMotionMasterClient)('192.168.1.112');
+if (!process.env.MOTION_MASTER_HOSTNAME) {
+    console.error('Error: MOTION_MASTER_HOSTNAME environment variable is not defined.');
+    process.exit(1);
+}
+const client = (0, motion_master_client_1.createMotionMasterClient)(process.env.MOTION_MASTER_HOSTNAME);
 client.reqResSocket.opened$.pipe((0, rxjs_1.first)(Boolean)).subscribe(onOpened);
 function onOpened() {
     return __awaiter(this, void 0, void 0, function* () {
