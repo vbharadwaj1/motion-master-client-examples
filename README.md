@@ -1,19 +1,28 @@
 # motion-master-client-examples
 
-## Running
+## Building
 
-Before executing a script you must set the MOTION_MASTER_HOSTNAME environment variable. Let's say the Motion Master process runs on 192.168.1.112 there are at least two way to do it:
-
-1. Create `.env` file and add the following line: `MOTION_MASTER_HOSTNAME=192.168.1.112`.
-2. Run a single script by specifying the variable: `$ MOTION_MASTER_HOSTNAME=192.168.1.112 node index.js`
-
-The advantage of first approach is that all scripts will use the same hostname.
-
-## Developing
-
-Build or watch for `.ts` files for changes:
+Before executing scripts, you must transpile from TypeScript to JavaScript:
 
 ```
 $ npm run build
+```
+
+The built JavaScript files are then available in the `dist/` folder.
+
+## Running
+
+Before executing a script, you must set the `MOTION_MASTER_HOSTNAME` environment variable. Let's say the Motion Master process runs at `192.168.1.112`, there are at least two ways to do it:
+
+1. Create `.env` file in the root of this repository and add the following line to it: `MOTION_MASTER_HOSTNAME=192.168.1.112`
+2. Run a single script by specifying the variable: `$ MOTION_MASTER_HOSTNAME=192.168.1.112 node dist/get-devices.js`
+
+The advantage of the first approach is that all scripts will use the same hostname, and you don't need to specify the variable when executing a script `$ node dist/get-devices.js`.
+
+## Developing
+
+Watch `.ts` files for changes and transpile automatically:
+
+```
 $ npm run watch
 ```
