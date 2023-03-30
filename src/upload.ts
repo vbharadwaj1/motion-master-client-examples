@@ -7,6 +7,7 @@ import Long from 'long';
 
   const value = await client.request.upload<Long>(0, 0x2030, 1);
   console.log(value);
+  console.log(value.toNumber());
 
   client.closeSockets();
 })();

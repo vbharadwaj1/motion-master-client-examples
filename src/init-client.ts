@@ -1,7 +1,8 @@
 require('dotenv').config()
 Object.assign(global, { WebSocket: require('ws') });
 
-import { createMotionMasterClient } from "motion-master-client";
+import Long from "long";
+import { createMotionMasterClient, ParameterValueType } from "motion-master-client";
 
 if (!process.env.MOTION_MASTER_HOSTNAME) {
   console.error('Error: MOTION_MASTER_HOSTNAME environment variable is not defined.');
@@ -23,4 +24,8 @@ export function logStatus(status: {
   } else if (status.error) {
     console.error(`Request failed for device ${status.deviceAddress}: (${status.error.code}) ${status.error.message}`);
   }
+}
+
+export function longToNumber(value: ParameterValueType) {
+  return Long.isLong(value) ? value.toNumber() : value;
 }
