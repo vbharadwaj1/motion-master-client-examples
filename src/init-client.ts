@@ -11,15 +11,16 @@ if (!process.env.MOTION_MASTER_HOSTNAME) {
 export const client = createMotionMasterClient(process.env.MOTION_MASTER_HOSTNAME);
 
 export function logStatus(status: {
+  deviceAddress?: number | null,
   success?: { message?: string | null, code?: number | null } | null,
   error?: { message?: string | null, code?: number | null } | null,
   warning?: { message?: string | null, code?: number | null } | null,
-}, type: string, deviceId?: string): void {
+}): void {
   if (status.success) {
-    console.info(`${type} succeeded for device ${deviceId}: (${status.success.code}) ${status.success.message}`);
+    console.info(`Request succeeded for device ${status.deviceAddress}: (${status.success.code}) ${status.success.message}`);
   } else if (status.warning) {
-    console.warn(`${type} warning for device ${deviceId}: (${status.warning.code}) ${status.warning.message}`);
+    console.warn(`Request warning for device ${status.deviceAddress}: (${status.warning.code}) ${status.warning.message}`);
   } else if (status.error) {
-    console.error(`${type} failed for device ${deviceId}: (${status.error.code}) ${status.error.message}`);
+    console.error(`Request failed for device ${status.deviceAddress}: (${status.error.code}) ${status.error.message}`);
   }
 }
