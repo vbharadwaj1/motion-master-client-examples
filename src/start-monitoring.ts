@@ -11,6 +11,7 @@ process.on('SIGINT', function () {
 });
 
 const ids: [number, number, number][] = [
+  [0, 0x20F0, 0], // Timestamp
   [0, 0x2030, 1], // Core temperature / Measured temperature
   [0, 0x2031, 1], // Drive temperature / Measured temperature
 ];
