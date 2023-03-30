@@ -1,6 +1,5 @@
 import { client } from './init-client';
 import { first, mergeMap, Subscription } from 'rxjs';
-import { DeviceRef } from 'motion-master-client';
 
 let subscription: Subscription;
 
@@ -11,7 +10,7 @@ process.on('SIGINT', function () {
   process.exit(0);
 });
 
-const ids: [DeviceRef, number, number][] = [
+const ids: [number, number, number][] = [
   [0, 0x2030, 1], // Core temperature / Measured temperature
   [0, 0x2031, 1], // Drive temperature / Measured temperature
 ];
