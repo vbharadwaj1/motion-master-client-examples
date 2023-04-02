@@ -1,8 +1,8 @@
 import { client } from './init-client';
-import { first, firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 (async function () {
-  await firstValueFrom(client.reqResSocket.opened$.pipe(first(Boolean)));
+  await client.whenReady();
 
   const devices = await firstValueFrom(client.request.getDevices());
   const json = JSON.stringify(devices, null, 2);

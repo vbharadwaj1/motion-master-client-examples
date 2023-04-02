@@ -30,7 +30,7 @@ const names = [
 
 console.log(names.join(', '));
 
-subscription = client.reqResSocket.opened$.pipe(
+subscription = client.socketsOpened$.pipe(
   first(Boolean),
   mergeMap(() => client.startMonitoring(ids, 1000000)),
 ).subscribe((values) => {

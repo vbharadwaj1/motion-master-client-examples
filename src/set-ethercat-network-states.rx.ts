@@ -4,7 +4,7 @@ import { MotionMasterMessage } from 'motion-master-client';
 
 const state = MotionMasterMessage.Request.SetEthercatNetworkState.State.OP;
 
-client.reqResSocket.opened$.pipe(
+client.socketsOpened$.pipe(
   first(Boolean),
   mergeMap(() => client.request.getDevices(3000)),
   mergeMap((devices) => forkJoin(devices.map(({ deviceAddress }) => client.request.setEthercatNetworkState({ deviceAddress, state }, 3000)))),

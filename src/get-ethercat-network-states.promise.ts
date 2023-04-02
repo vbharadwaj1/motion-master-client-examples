@@ -1,9 +1,9 @@
 import { client, logStatus } from './init-client';
-import { first, firstValueFrom, forkJoin } from 'rxjs';
+import { firstValueFrom, forkJoin } from 'rxjs';
 import { MotionMasterMessage } from 'motion-master-client';
 
 (async function () {
-  await firstValueFrom(client.reqResSocket.opened$.pipe(first(Boolean)));
+  await client.whenReady();
 
   const devices = await firstValueFrom(client.request.getDevices(3000));
 
