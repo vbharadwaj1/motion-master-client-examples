@@ -11,13 +11,16 @@ client.socketsOpened$.pipe(
   tap((d) => { devices = d }),
   mergeMap((devices) => combineLatest(devices.map(({ deviceAddress }) => client.request.startFullAutoTuning({ deviceAddress, controllerType: 0 }, 60000)))),
 ).subscribe({
-  next: (statuses) => {
-    const json = JSON.stringify(mapStatusesToMessages(statuses));
-    console.clear();
-    console.log(json);
-  },
+  next: printStatuses,
   complete: () => client.closeSockets(),
 });
+
+function printStatuses(statuses: FullAutoTuningStatus[]) {
+  const messages = mapStatusesToMessages(statuses);
+  const json = JSON.stringify(messages);
+  console.clear();
+  console.log(json);
+}
 
 function mapStatusesToMessages(statuses: FullAutoTuningStatus[]) {
   return statuses.map((status, index) => {

@@ -13,6 +13,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "long": "^5.2.1",
-    "motion-master-client": "^0.0.14"
+    "motion-master-client": "^0.0.15",
+    "ws": "^8.13.0"
   }
 }

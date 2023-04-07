@@ -1,5 +1,5 @@
 require('dotenv').config()
-Object.assign(global, { WebSocket: require('ws') });
+Object.assign(globalThis, { WebSocket: require('ws') });
 
 import Long from "long";
 import { createMotionMasterClient, ParameterValueType } from "motion-master-client";
