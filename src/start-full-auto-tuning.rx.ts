@@ -1,7 +1,7 @@
 import { Device } from 'motion-master-client/src/lib/device';
 import { client } from './init-client';
 import { first, mergeMap, combineLatest, tap } from 'rxjs';
-import { MotionMasterMessage, RequestStatus } from 'motion-master-client';
+import { FullAutoTuningStatus } from 'motion-master-client';
 
 let devices: Device[];
 
@@ -19,7 +19,7 @@ client.socketsOpened$.pipe(
   complete: () => client.closeSockets(),
 });
 
-function mapStatusesToMessages(statuses: (MotionMasterMessage.Status.FullAutoTuning & { messageId: string, request: RequestStatus })[]) {
+function mapStatusesToMessages(statuses: FullAutoTuningStatus[]) {
   return statuses.map((status, index) => {
     const id = devices[index]?.id;
     if (status.request === 'succeeded') {
