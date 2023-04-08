@@ -13,21 +13,23 @@ let devices: Device[];
 client.whenReady().then(async () => {
   devices = await firstValueFrom(client.request.getDevices());
 
-  const buffers = devices.map(({ deviceAddress, hardwareDescription }) => {
+  const resolvedPackages = devices.reduce((items, { deviceAddress, hardwareDescription, id }) => {
     if (hardwareDescription) {
       const packageFilename = packageFilenames.find((filename) => isHardwareDescriptionCompatibleWithPackageFilename(hardwareDescription, filename));
       if (packageFilename) {
         const buffer = readFileSync(join(packagesDir, packageFilename));
-        return { deviceAddress, buffer };
+        items.push([deviceAddress, buffer]);
+      } else {
+        console.error(`No package file found for device ${id}. Exiting...`);
+        process.exit(1);
       }
     }
-    return { deviceAddress, buffer: null };
-  });
-
-  // TODO: Filter out where buffer is null and write console.error
+    return items;
+  }, [] as [number, Buffer][]);
 
   combineLatest(
-    buffers.map(({ deviceAddress, buffer: firmwarePackageContent }) => client.request.startDeviceFirmwareInstallation({ deviceAddress, firmwarePackageContent }, 60000)),
+    resolvedPackages.map(([deviceAddress, firmwarePackageContent]) =>
+      client.request.startDeviceFirmwareInstallation({ deviceAddress, firmwarePackageContent }, 60000))
   ).subscribe({
     next: printStatuses,
     complete: () => client.closeSockets(),
