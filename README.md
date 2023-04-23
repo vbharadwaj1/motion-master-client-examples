@@ -19,6 +19,15 @@ Before executing a script, you must set the `MOTION_MASTER_HOSTNAME` environment
 
 The advantage of the first approach is that all scripts will use the same hostname, and you don't need to specify the variable when executing a script `$ node dist/get-devices.js`.
 
+To log all outgoing and incoming Motion Master messages run a script with `ROAR_LOG=true` environment variable.
+
+This is how the `.env` file could look like:
+
+```sh
+MOTION_MASTER_HOSTNAME=192.168.1.112
+ROARR_LOG=true
+```
+
 ## Developing
 
 Watch `.ts` files for changes and transpile automatically:
