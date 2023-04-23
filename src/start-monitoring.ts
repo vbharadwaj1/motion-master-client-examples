@@ -32,12 +32,12 @@ const ids: [number, number, number][] = [
 ];
 
 const names = ids.map(([, index, subindex]) => makeParameterId(index, subindex));
-console.log(names.join(', '));
+console.log(names.join(','));
 
 subscription = client.socketsOpened$.pipe(
   first(Boolean),
   mergeMap(() => client.startMonitoring(ids, 100000)),
 ).subscribe((values) => {
   // console.log(values);
-  console.log(values.map(longToNumber).join(', '));
+  console.log(values.map(longToNumber).join(','));
 });
