@@ -1,12 +1,11 @@
 import { Device } from 'motion-master-client/src/lib/device';
 import { client } from './init-client';
-import { first, mergeMap, combineLatest, tap } from 'rxjs';
+import { mergeMap, combineLatest, tap } from 'rxjs';
 import { FullAutoTuningStatus } from 'motion-master-client';
 
 let devices: Device[];
 
 client.socketsOpened$.pipe(
-  first(Boolean),
   mergeMap(() => client.request.getDevices(3000)),
   tap((d) => { devices = d }),
   mergeMap((devices) => combineLatest(devices.map(({ deviceAddress }) => client.request.startFullAutoTuning({ deviceAddress, controllerType: 0 }, 60000)))),

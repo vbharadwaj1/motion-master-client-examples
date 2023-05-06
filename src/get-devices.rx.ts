@@ -1,8 +1,7 @@
 import { client } from './init-client';
-import { first, mergeMap } from 'rxjs';
+import { mergeMap } from 'rxjs';
 
-client.socketsOpened$.pipe(
-  first(Boolean),
+client.ready$.pipe(
   mergeMap(() => client.request.getDevices()),
 ).subscribe({
   next: (devices) => {

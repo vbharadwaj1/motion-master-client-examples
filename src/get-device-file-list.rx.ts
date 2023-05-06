@@ -1,8 +1,7 @@
 import { client } from './init-client';
-import { first, mergeMap, map } from 'rxjs';
+import { mergeMap, map } from 'rxjs';
 
-client.socketsOpened$.pipe(
-  first(Boolean),
+client.ready$.pipe(
   mergeMap(() => client.request.getDeviceFileList({ devicePosition: 0 }, 2000)),
   map((status) => status.fileList?.files ?? []),
 ).subscribe({

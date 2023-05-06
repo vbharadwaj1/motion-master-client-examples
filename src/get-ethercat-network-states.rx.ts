@@ -1,9 +1,8 @@
 import { client, logStatus } from './init-client';
-import { first, forkJoin, mergeMap } from 'rxjs';
+import { forkJoin, mergeMap } from 'rxjs';
 import { MotionMasterMessage } from 'motion-master-client';
 
-client.socketsOpened$.pipe(
-  first(Boolean),
+client.ready$.pipe(
   mergeMap(() => client.request.getDevices(3000)),
   mergeMap((devices) => forkJoin(devices.map(({ deviceAddress }) => client.request.getEthercatNetworkState({ deviceAddress }, 3000)))),
 ).subscribe({
