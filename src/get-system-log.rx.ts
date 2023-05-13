@@ -1,7 +1,7 @@
 import { client } from './init-client';
 import { mergeMap } from 'rxjs';
 
-client.ready$.pipe(
+client.onceReady$.pipe(
   mergeMap(() => client.request.getSystemLog(2000)),
 ).subscribe({
   next: (status) => console.log(status?.content),

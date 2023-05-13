@@ -33,7 +33,7 @@ const ids: [number, number, number][] = [
 const names = ids.map(([, index, subindex]) => makeParameterId(index, subindex));
 console.log(names.join(','));
 
-subscription = client.ready$.pipe(
+subscription = client.onceReady$.pipe(
   mergeMap(() => client.startMonitoring(ids, 100000)),
 ).subscribe((values) => {
   // console.log(values);
