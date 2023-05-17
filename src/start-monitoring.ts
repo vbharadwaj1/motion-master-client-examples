@@ -1,6 +1,6 @@
 import { makeParameterId } from 'motion-master-client';
 import { client, longToNumber } from './init-client';
-import { first, mergeMap, Subscription } from 'rxjs';
+import { mergeMap, Subscription } from 'rxjs';
 
 let subscription: Subscription;
 
