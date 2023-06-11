@@ -1,5 +1,5 @@
 import { makeParameterId } from 'motion-master-client';
-import { client, longToNumber } from './init-client';
+import { client } from './init-client';
 import { mergeMap, Subscription } from 'rxjs';
 
 let subscription: Subscription;
@@ -38,6 +38,5 @@ console.log(names.join(','));
 subscription = client.onceReady$.pipe(
   mergeMap(() => client.startMonitoring(ids, 100000)),
 ).subscribe((values) => {
-  // console.log(values);
-  console.log(values.map(longToNumber).join(','));
+  console.log(values);
 });

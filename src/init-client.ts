@@ -1,7 +1,6 @@
 require('dotenv').config()
 Object.assign(globalThis, { WebSocket: require('ws') });
 
-import Long from "long";
 import { createMotionMasterClient, ParameterValueType } from "motion-master-client";
 
 if (!process.env.MOTION_MASTER_HOSTNAME) {
@@ -24,8 +23,4 @@ export function logStatus(status: {
   } else if (status.error) {
     console.error(`Request failed for device ${status.deviceAddress}: (${status.error.code}) ${status.error.message}`);
   }
-}
-
-export function longToNumber(value: ParameterValueType) {
-  return Long.isLong(value) ? value.toNumber() : value;
 }
