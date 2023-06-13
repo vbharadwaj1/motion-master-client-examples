@@ -2,9 +2,7 @@ import { client, logStatus } from './init-client';
 import { firstValueFrom, forkJoin } from 'rxjs';
 import { MotionMasterMessage } from 'motion-master-client';
 
-(async function () {
-  await client.whenReady();
-
+client.whenReady().then(async () => {
   const devices = await firstValueFrom(client.request.getDevices(3000));
 
   const requests$ = devices.map(({ deviceAddress }) => client.request.getEthercatNetworkState({ deviceAddress }, 3000));
@@ -15,6 +13,4 @@ import { MotionMasterMessage } from 'motion-master-client';
     const value = MotionMasterMessage.Status.EthercatNetworkState.State[Number(status.state)];
     console.log(`${status.deviceAddress}: ${value}`);
   });
-
-  client.closeSockets();
-})();
+}).finally(() => client.closeSockets());

@@ -14,8 +14,5 @@ client.whenReady().then(async () => {
       map((status) => status.fileList?.files ?? []),
     ),
   );
-
   console.log(fileList);
-
-  client.closeSockets();
-});
+}).finally(() => client.closeSockets());

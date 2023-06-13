@@ -12,6 +12,4 @@ client.whenReady().then(async () => {
 
   const prevLog = await firstValueFrom(client.request.getDecodedFile(deviceRef, 'logging_prev.log'));
   console.log(prevLog);
-
-  client.closeSockets();
-});
+}).finally(() => client.closeSockets());

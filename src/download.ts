@@ -13,5 +13,4 @@ const [index, subindex, value] = program.processedArgs;
 
 client.whenReady().then(async () => {
   await client.request.download(deviceRef, index, subindex, value);
-  client.closeSockets();
-});
+}).finally(() => client.closeSockets());
