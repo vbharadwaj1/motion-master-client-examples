@@ -12,5 +12,11 @@ const { deviceRef } = program.opts();
 const [index, subindex, value] = program.processedArgs;
 
 client.whenReady().then(async () => {
-  await client.request.download(deviceRef, index, subindex, value);
+  try {
+    await client.request.download(deviceRef, index, subindex, value);
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err.message);
+    }
+  }
 }).finally(() => client.closeSockets());

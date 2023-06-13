@@ -11,7 +11,12 @@ const { deviceRef } = program.opts();
 const [index, subindex] = program.processedArgs;
 
 client.whenReady().then(async () => {
-  const value = await client.request.upload(deviceRef, index, subindex);
-  console.log(value);
-  client.closeSockets();
-});
+  try {
+    const value = await client.request.upload(deviceRef, index, subindex);
+    console.log(value);
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err.message);
+    }
+  }
+}).finally(() => client.closeSockets());
