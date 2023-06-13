@@ -1,15 +1,21 @@
-import { client } from './init-client';
+import { program } from 'commander';
+import { makeDeviceRefObj } from 'motion-master-client';
 import { firstValueFrom, map } from 'rxjs';
+import { client } from './init-client';
 
-(async function () {
-  await client.whenReady();
+program.parse();
 
+const { deviceRef } = program.opts();
+const deviceRefObj = makeDeviceRefObj(deviceRef);
+
+client.whenReady().then(async () => {
   const fileList = await firstValueFrom(
-    client.request.getDeviceFileList({ devicePosition: 0 }, 2000).pipe(
+    client.request.getDeviceFileList(deviceRefObj, 3000).pipe(
       map((status) => status.fileList?.files ?? []),
     ),
   );
+
   console.log(fileList);
 
   client.closeSockets();
-})();
+});
