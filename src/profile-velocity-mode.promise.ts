@@ -14,6 +14,4 @@ client.whenReady().then(async () => {
   ]);
 
   await client.request.transitionToCia402State(deviceRef, Cia402State.OPERATION_ENABLED);
-
-  client.closeSockets();
-});
+}).finally(() => client.closeSockets());

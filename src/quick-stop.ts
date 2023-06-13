@@ -7,7 +7,5 @@ client.whenReady().then(async () => {
     if (err instanceof Error) {
       console.error(err.message);
     }
-  } finally {
-    client.closeSockets();
   }
-});
+}).finally(() => client.closeSockets());
