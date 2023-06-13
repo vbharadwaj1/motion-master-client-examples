@@ -7,10 +7,9 @@ client.whenReady().then(async () => {
   await client.request.resetTargets(deviceRef);
 
   await client.request.downloadMany([
-    [deviceRef, 0x6060, 0, 3], // profile velocity mode
-    [deviceRef, 0x60FF, 0, 250], // target velocity
-    [deviceRef, 0x6083, 0, 5000], // profile acceleration
-    [deviceRef, 0x6084, 0, 5000], // profile deceleration
+    [deviceRef, 0x6060, 0, 4], // profile torque mode
+    [deviceRef, 0x6071, 0, 500], // target torque
+    [deviceRef, 0x6087, 0, 100], // torque slope
   ]);
 
   await client.request.transitionToCia402State(deviceRef, Cia402State.OPERATION_ENABLED);
