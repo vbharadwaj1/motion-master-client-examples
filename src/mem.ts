@@ -3,17 +3,17 @@ import { bufferCount, distinctUntilChanged, filter, map, mergeMap, Subscription,
 
 let subscription: Subscription;
 
-const samplingInterval = 250000; // microseconds
-const resolution = 4096; // ticks
-const ticksPerChar = 4096 / 26;
-const samplingSize = 6;
-
 process.on('SIGINT', function () {
   console.log("\nGracefully shutting down from SIGINT (Ctrl-C).\nStopping monitoring and closing sockets.");
   subscription?.unsubscribe();
   client.closeSockets();
   process.exit(0);
 });
+
+const samplingInterval = 250000; // microseconds
+const resolution = 524288; // ticks
+const ticksPerChar = resolution / 26;
+const samplingSize = 6;
 
 subscription = client.onceReady$.pipe(
   mergeMap(() => client.startMonitoringValue([0, 0x6064, 0], samplingInterval)),

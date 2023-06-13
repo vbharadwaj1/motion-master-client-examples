@@ -1,11 +1,7 @@
 import { client } from './init-client';
 import { firstValueFrom } from 'rxjs';
 
-(async function () {
-  await client.whenReady();
-
+client.whenReady().then(async () => {
   const status = await firstValueFrom(client.request.getSystemLog(2000));
   console.log(status?.content);
-
-  client.closeSockets();
-})();
+}).finally(() => client.closeSockets());

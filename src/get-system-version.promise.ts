@@ -1,11 +1,7 @@
 import { client } from './init-client';
 import { firstValueFrom } from 'rxjs';
 
-(async function () {
-  await client.whenReady();
-
+client.whenReady().then(async () => {
   const status = await firstValueFrom(client.request.getSystemVersion(2000));
   console.log(`System version is ${status?.version}`);
-
-  client.closeSockets();
-})();
+}).finally(() => client.closeSockets());
