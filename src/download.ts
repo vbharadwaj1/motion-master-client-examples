@@ -1,5 +1,5 @@
-import { client } from './init-client';
 import { program, Argument } from 'commander';
+import { client } from './init-client';
 
 program
   .addArgument(new Argument('<index>', 'object index in hexadecimal notation').argParser((value) => parseInt(value, 16)))

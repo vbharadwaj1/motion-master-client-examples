@@ -1,7 +1,10 @@
-import { Cia402State } from 'motion-master-client';
+import { program } from 'commander';
 import { client } from './init-client';
+import { Cia402State } from 'motion-master-client';
 
-const deviceRef = 0;
+program.parse();
+
+const { deviceRef } = program.opts();
 
 client.whenReady().then(async () => {
   await client.request.resetTargets(deviceRef);
