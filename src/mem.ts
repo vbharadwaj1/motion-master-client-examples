@@ -94,7 +94,7 @@ function createCharToPositionMap(refPoint: number = 0): { [char: string]: number
   return obj;
 }
 
-say('RUA').then(async () => {
+say('TEST').then(async () => {
   await client.request.quickStop(deviceRef);
   client.closeSockets()
 });
