@@ -67,7 +67,7 @@ async function say(message: string): Promise<void> {
     [deviceRef, 0x6060, 0, 1], // profile position mode
     [deviceRef, 0x6067, 0, 250], // position window
     [deviceRef, 0x607A, 0, positionActualValue], // target position
-    [deviceRef, 0x6081, 0, 100000], // profile velocity
+    [deviceRef, 0x6081, 0, 10000], // profile velocity
     [deviceRef, 0x6083, 0, 10000], // profile acceleration
     [deviceRef, 0x6084, 0, 10000], // profile deceleration
   ]);
