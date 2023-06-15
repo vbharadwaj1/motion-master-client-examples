@@ -16,18 +16,18 @@ process.on('SIGINT', function () {
   process.exit(0);
 });
 
-const samplingInterval = 250000; // microseconds
+const monitoringInterval = 250000; // microseconds
 const resolution = 524288; // ticks
 const ticksPerChar = Math.round(resolution / 26);
-const standardDeviationMargin = ticksPerChar / 4;
-const samplingSize = 6;
+const standardDeviationWindow = ticksPerChar / 4;
+const bufferSize = 6;
 
 subscription = client.onceReady$.pipe(
-  mergeMap(() => client.startMonitoringValue([deviceRef, 0x6064, 0], samplingInterval)),
-  bufferCount(samplingSize),
+  mergeMap(() => client.startMonitoringValue([deviceRef, 0x6064, 0], monitoringInterval)),
+  bufferCount(bufferSize),
   filter((values) => {
     const standardDeviation = calculateStandardDeviation(values);
-    return standardDeviation < standardDeviationMargin;
+    return standardDeviation < standardDeviationWindow;
   }),
   map((values) => calculateCharPosition(values)),
   distinctUntilChanged(),
