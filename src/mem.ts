@@ -60,7 +60,8 @@ function calculateCharPosition(data: number[]): number {
 async function say(message: string): Promise<void> {
   const chars = message.toUpperCase().split('');
   const positionActualValue = await client.request.upload(deviceRef, 0x6064, 0);
-  const charToPositionMap = createCharToPositionMap();
+  const refPoint = positionActualValue - (positionActualValue % resolution);
+  const charToPositionMap = createCharToPositionMap(refPoint);
 
   await client.request.downloadMany([
     [deviceRef, 0x6060, 0, 1], // profile position mode
@@ -84,13 +85,15 @@ async function say(message: string): Promise<void> {
   return;
 }
 
-function createCharToPositionMap(): { [char: string]: number } {
+function createCharToPositionMap(refPoint: number = 0): { [char: string]: number } {
   const val = Math.round(ticksPerChar / 2);
   const obj: { [char: string]: number } = {};
   for (let i = 0; i < 26; i++) {
-    obj[String.fromCharCode(65 + i)] = i * ticksPerChar + val;
+    obj[String.fromCharCode(65 + i)] = i * ticksPerChar + val + refPoint;
   }
   return obj;
 }
 
-say('TEST').then(() => client.closeSockets());
+say('TEST').then(() => {
+  client.closeSockets()
+});
