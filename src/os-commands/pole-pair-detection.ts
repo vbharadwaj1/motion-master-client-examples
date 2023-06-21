@@ -15,20 +15,22 @@ client.whenReady().then(async () => {
     await client.request.download(deviceRef, 0x6060, 0, -2);
     await client.request.transitionToCia402State(deviceRef, Cia402State.OPERATION_ENABLED);
 
-    // Just in case read and ignore the response of previous OS command
-    await client.request.upload(deviceRef, 0x1023, 3, false, 5000);
-
     // Run the OS command
     const command = [7, 0, 0, 0, 0, 0, 0, 0];
-    const buffer = new Uint8Array(command);
-    await client.request.download(deviceRef, 0x1023, 1, buffer); // TODO: Don't specify rawValue
+    await client.request.download(deviceRef, 0x1023, 1, command);
 
+    // Poll for the response while in progress
     while (true) {
-      await resolveAfter(2000);
-      const status = await client.request.upload<Uint8Array>(deviceRef, 0x1023, 3, false, 3000); // TODO: Change Uint8Array to number[]
-      if (status[0] !== 255) {
-        console.log(status);
+      await resolveAfter(1000);
+      const response = await client.request.upload<number[]>(deviceRef, 0x1023, 3);
+
+      if (response[0] === 255) { // in progress
+        process.stdout.write('.');
+      } else if (response[0] === 1) { // completed, no errors, has response data
+        console.log(` detected ${response[2]} pole pairs`);
         break;
+      } else {
+        throw new Error(`Unexpected response: ${response}`);
       }
     }
   } catch (err) {
