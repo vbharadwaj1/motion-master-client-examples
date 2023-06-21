@@ -21,7 +21,7 @@ client.whenReady().then(async () => {
     // Run the OS command
     const command = [7, 0, 0, 0, 0, 0, 0, 0];
     const buffer = new Uint8Array(command);
-    await client.request.download(deviceRef, 0x1023, 1, buffer, 'rawValue', 5000); // TODO: Don't specify rawValue
+    await client.request.download(deviceRef, 0x1023, 1, buffer); // TODO: Don't specify rawValue
 
     while (true) {
       await resolveAfter(2000);
