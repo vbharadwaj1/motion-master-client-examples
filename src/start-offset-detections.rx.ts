@@ -1,10 +1,16 @@
+import { program } from 'commander';
+import { makeDeviceRefObj } from 'motion-master-client';
+import { mergeMap } from 'rxjs';
 import { client, logStatus } from './init-client';
-import { forkJoin, mergeMap } from 'rxjs';
+
+program.parse();
+
+const { deviceRef } = program.opts();
+const deviceRefObj = makeDeviceRefObj(deviceRef);
 
 client.onceReady$.pipe(
-  mergeMap(() => client.request.getDevices(3000)),
-  mergeMap((devices) => forkJoin(devices.map(({ deviceAddress }) => client.request.startOffsetDetection({ deviceAddress }, 60000)))),
+  mergeMap(() => client.request.startOffsetDetection(deviceRefObj, 60000)),
 ).subscribe({
-  next: (statuses) => statuses.forEach(logStatus),
+  next: logStatus,
   complete: () => client.closeSockets(),
 });

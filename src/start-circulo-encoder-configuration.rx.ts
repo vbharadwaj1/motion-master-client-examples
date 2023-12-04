@@ -1,6 +1,6 @@
 import { Argument, program } from 'commander';
 import { makeDeviceRefObj } from 'motion-master-client';
-import { firstValueFrom, mergeMap } from 'rxjs';
+import { mergeMap } from 'rxjs';
 import { client, logStatus } from './init-client';
 
 program

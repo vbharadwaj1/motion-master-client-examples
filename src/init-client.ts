@@ -16,6 +16,7 @@ export function logStatus(status: {
   success?: { message?: string | null, code?: number | null } | null,
   error?: { message?: string | null, code?: number | null } | null,
   warning?: { message?: string | null, code?: number | null } | null,
+  progress?: { message?: string | null, code?: number | null, percentage?: number | null } | null,
 }): void {
   if (status.success) {
     console.info(`Request succeeded for device ${status.deviceAddress}: (${status.success.code}) ${status.success.message}`);
@@ -23,6 +24,8 @@ export function logStatus(status: {
     console.warn(`Request warning for device ${status.deviceAddress}: (${status.warning.code}) ${status.warning.message}`);
   } else if (status.error) {
     console.error(`Request failed for device ${status.deviceAddress}: (${status.error.code}) ${status.error.message}`);
+  } else if (status.progress) {
+    console.info(`Progress for device ${status.deviceAddress}: (${status.progress.code}) ${status.progress.message ?? ''} ${status.progress.percentage}%`);
   }
 }
 
