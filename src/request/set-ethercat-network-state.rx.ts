@@ -1,6 +1,6 @@
 import { Argument, program } from 'commander';
 import { MotionMasterMessage, makeDeviceRefObj } from 'motion-master-client';
-import { client, logStringifiedStatus } from '../init-client';
+import { client, logStringified } from '../init-client';
 import { mergeMap } from 'rxjs';
 
 program.addArgument(
@@ -18,6 +18,6 @@ const [state] = program.processedArgs as [MotionMasterMessage.Status.EthercatNet
 client.onceReady$.pipe(
   mergeMap(() => client.request.setEthercatNetworkState({ ...deviceRefObj, state }, requestTimeout, messageId)),
 ).subscribe({
-  next: logStringifiedStatus,
+  next: logStringified,
   complete: () => client.closeSockets(),
 });

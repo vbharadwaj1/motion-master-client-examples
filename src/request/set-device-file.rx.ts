@@ -2,7 +2,7 @@ import { Argument, program } from 'commander';
 import { makeDeviceRefObj } from 'motion-master-client';
 import { readFileSync } from 'fs';
 import { mergeMap } from 'rxjs';
-import { client, logStringifiedStatus } from '../init-client';
+import { client, logStringified } from '../init-client';
 
 program
   .addArgument(new Argument('<name>', 'file name, e.g. config.csv'))
@@ -24,6 +24,6 @@ const content = Buffer.from(readFileSync(path, { encoding: 'utf-8' }), 'utf-8');
 client.onceReady$.pipe(
   mergeMap(() => client.request.setDeviceFile({ ...deviceRefObj, name, content, overwrite }, requestTimeout, messageId)),
 ).subscribe({
-  next: logStringifiedStatus,
+  next: logStringified,
   complete: () => client.closeSockets(),
 });

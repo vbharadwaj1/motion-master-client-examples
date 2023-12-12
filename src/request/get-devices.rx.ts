@@ -4,10 +4,10 @@ import { mergeMap } from 'rxjs';
 
 program.parse();
 
-const { requestTimeout = 2000, messageId } = program.opts();
+const { requestTimeout = 30000 } = program.opts();
 
 client.onceReady$.pipe(
-  mergeMap(() => client.request.getSystemVersion(requestTimeout, messageId)),
+  mergeMap(() => client.request.getDevices(requestTimeout)),
 ).subscribe({
   next: logStringified,
   complete: () => client.closeSockets(),

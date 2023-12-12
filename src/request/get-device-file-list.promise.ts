@@ -1,7 +1,7 @@
 import { program } from 'commander';
 import { makeDeviceRefObj } from 'motion-master-client';
 import { firstValueFrom } from 'rxjs';
-import { client, logStringifiedStatus } from '../init-client';
+import { client, logStringified } from '../init-client';
 
 program.parse();
 
@@ -10,5 +10,5 @@ const deviceRefObj = makeDeviceRefObj(deviceRef);
 
 client.whenReady().then(async () => {
   const status = await firstValueFrom(client.request.getDeviceFileList(deviceRefObj, requestTimeout, messageId));
-  logStringifiedStatus(status);
+  logStringified(status);
 }).finally(() => client.closeSockets());

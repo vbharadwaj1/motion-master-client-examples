@@ -29,7 +29,7 @@ export function logStatus(status: {
   }
 }
 
-export function logStringifiedStatus(status: any) {
+export function logStringified(status: any) {
   console.log(JSON.stringify(status, null, 2));
 }
 

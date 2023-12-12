@@ -1,6 +1,6 @@
 import { Argument, program } from 'commander';
 import { MotionMasterMessage, makeDeviceRefObj } from 'motion-master-client';
-import { client, logStringifiedStatus } from '../init-client';
+import { client, logStringified } from '../init-client';
 import { firstValueFrom } from 'rxjs';
 
 program.addArgument(
@@ -17,5 +17,5 @@ const [state] = program.processedArgs as [MotionMasterMessage.Status.DeviceCiA40
 
 client.whenReady().then(async () => {
   const status = await firstValueFrom(client.request.setDeviceCia402State({ ...deviceRefObj, state }, requestTimeout, messageId));
-  logStringifiedStatus(status);
+  logStringified(status);
 }).finally(() => client.closeSockets());

@@ -4,9 +4,9 @@ import { firstValueFrom } from 'rxjs';
 
 program.parse();
 
-const { requestTimeout = 30000, messageId } = program.opts();
+const { requestTimeout = 30000 } = program.opts();
 
 client.whenReady().then(async () => {
-  const status = await firstValueFrom(client.request.getSystemLog(requestTimeout, messageId));
-  logStringified(status);
+  const devices = await firstValueFrom(client.request.getDevices(requestTimeout));
+  logStringified(devices);
 }).finally(() => client.closeSockets());

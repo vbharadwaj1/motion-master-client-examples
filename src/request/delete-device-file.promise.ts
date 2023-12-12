@@ -1,7 +1,7 @@
 import { Argument, program } from 'commander';
 import { makeDeviceRefObj } from 'motion-master-client';
 import { firstValueFrom } from 'rxjs';
-import { client, logStringifiedStatus } from '../init-client';
+import { client, logStringified } from '../init-client';
 
 program.addArgument(new Argument('<name>', 'file name, e.g. config.csv'));
 
@@ -13,5 +13,5 @@ const [name] = program.processedArgs as [string];
 
 client.whenReady().then(async () => {
   const status = await firstValueFrom(client.request.deleteDeviceFile({ ...deviceRefObj, name }, requestTimeout, messageId));
-  logStringifiedStatus(status);
+  logStringified(status);
 }).finally(() => client.closeSockets());

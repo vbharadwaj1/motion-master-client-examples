@@ -1,6 +1,6 @@
 import { Argument, program } from 'commander';
 import { makeDeviceRefObj } from 'motion-master-client';
-import { client, logStringifiedStatus } from '../init-client';
+import { client, logStringified } from '../init-client';
 import { lastValueFrom } from 'rxjs';
 
 program
@@ -18,5 +18,5 @@ const [skipAutoTuning] = program.processedArgs as [boolean];
 
 client.whenReady().then(async () => {
   const status = await lastValueFrom(client.request.startCoggingTorqueRecording({ ...deviceRefObj, skipAutoTuning }, requestTimeout, messageId));
-  logStringifiedStatus(status);
+  logStringified(status);
 }).finally(() => client.closeSockets());

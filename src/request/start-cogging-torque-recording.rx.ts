@@ -1,6 +1,6 @@
 import { Argument, program } from 'commander';
 import { makeDeviceRefObj } from 'motion-master-client';
-import { client, logStringifiedStatus } from '../init-client';
+import { client, logStringified } from '../init-client';
 import { mergeMap } from 'rxjs';
 
 program
@@ -19,6 +19,6 @@ const [skipAutoTuning] = program.processedArgs as [boolean];
 client.onceReady$.pipe(
   mergeMap(() => client.request.startCoggingTorqueRecording({ ...deviceRefObj, skipAutoTuning }, requestTimeout, messageId)),
 ).subscribe({
-  next: logStringifiedStatus,
+  next: logStringified,
   complete: () => client.closeSockets(),
 });

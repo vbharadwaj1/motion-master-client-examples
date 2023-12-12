@@ -2,7 +2,7 @@ import { Argument, program } from 'commander';
 import { makeDeviceRefObj } from 'motion-master-client';
 import { readFileSync } from 'fs';
 import { firstValueFrom } from 'rxjs';
-import { client, logStringifiedStatus } from '../init-client';
+import { client, logStringified } from '../init-client';
 
 program
   .addArgument(new Argument('<name>', 'file name, e.g. config.csv'))
@@ -23,6 +23,6 @@ const content = Buffer.from(readFileSync(path, { encoding: 'utf-8' }), 'utf-8');
 
 client.whenReady().then(async () => {
   const status = await firstValueFrom(client.request.setDeviceFile({ ...deviceRefObj, name, content, overwrite }, requestTimeout, messageId));
-  logStringifiedStatus(status);
+  logStringified(status);
 }).finally(() => client.closeSockets());
 

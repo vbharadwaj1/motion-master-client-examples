@@ -11,7 +11,7 @@ const packageFilenames = readdirSync(packagesDir);
 let devices: Device[];
 
 client.whenReady().then(async () => {
-  devices = await firstValueFrom(client.request.getDevices());
+  devices = await firstValueFrom(client.request.getDevices(10000));
 
   const resolvedPackages = devices.reduce((items, { deviceAddress, hardwareDescription, id }) => {
     if (hardwareDescription) {

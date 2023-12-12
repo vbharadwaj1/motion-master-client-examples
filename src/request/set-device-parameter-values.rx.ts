@@ -1,6 +1,6 @@
 import { Argument, program } from 'commander';
 import { MotionMasterMessage, ParameterTypeValue, makeDeviceRefObj, splitParameterId } from 'motion-master-client';
-import { client, logStringifiedStatus } from '../init-client';
+import { client, logStringified } from '../init-client';
 import { mergeMap } from 'rxjs';
 
 program
@@ -26,6 +26,6 @@ const parameterValues = parameterIdsWithValuesAndTypes.split(',').reduce((arr, s
 client.onceReady$.pipe(
   mergeMap(() => client.request.setDeviceParameterValues({ ...deviceRefObj, parameterValues }, requestTimeout, messageId)),
 ).subscribe({
-  next: logStringifiedStatus,
+  next: logStringified,
   complete: () => client.closeSockets(),
 });

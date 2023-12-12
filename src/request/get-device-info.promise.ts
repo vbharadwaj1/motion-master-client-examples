@@ -1,5 +1,5 @@
 import { program } from 'commander';
-import { client, logStringifiedStatus } from '../init-client';
+import { client, logStringified } from '../init-client';
 import { firstValueFrom } from 'rxjs';
 
 program.parse();
@@ -8,5 +8,5 @@ const { requestTimeout = 3000, messageId } = program.opts();
 
 client.whenReady().then(async () => {
   const status = await firstValueFrom(client.request.getDeviceInfo(requestTimeout, messageId));
-  logStringifiedStatus(status);
+  logStringified(status);
 }).finally(() => client.closeSockets());

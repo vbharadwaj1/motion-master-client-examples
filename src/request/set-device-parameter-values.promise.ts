@@ -1,6 +1,6 @@
 import { Argument, program } from 'commander';
 import { MotionMasterMessage, ParameterTypeValue, makeDeviceRefObj, splitParameterId } from 'motion-master-client';
-import { client, logStringifiedStatus } from '../init-client';
+import { client, logStringified } from '../init-client';
 import { lastValueFrom } from 'rxjs';
 
 program
@@ -25,5 +25,5 @@ const parameterValues = parameterIdsWithValuesAndTypes.split(',').reduce((arr, s
 
 client.whenReady().then(async () => {
   const status = await lastValueFrom(client.request.setDeviceParameterValues({ ...deviceRefObj, parameterValues }, requestTimeout, messageId));
-  logStringifiedStatus(status);
+  logStringified(status);
 }).finally(() => client.closeSockets());

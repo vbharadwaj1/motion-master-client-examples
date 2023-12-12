@@ -1,7 +1,7 @@
 import { program } from 'commander';
 import { makeDeviceRefObj } from 'motion-master-client';
 import { mergeMap } from 'rxjs';
-import { client, logStringifiedStatus } from '../init-client';
+import { client, logStringified } from '../init-client';
 
 program.parse();
 
@@ -11,6 +11,6 @@ const deviceRefObj = makeDeviceRefObj(deviceRef);
 client.onceReady$.pipe(
   mergeMap(() => client.request.getDeviceFileList(deviceRefObj, requestTimeout, messageId)),
 ).subscribe({
-  next: logStringifiedStatus,
+  next: logStringified,
   complete: () => client.closeSockets(),
 });
