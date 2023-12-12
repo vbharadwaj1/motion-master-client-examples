@@ -14,7 +14,7 @@ program.parse();
 
 const { deviceRef, requestTimeout = 120000, messageId } = program.opts();
 const deviceRefObj = makeDeviceRefObj(deviceRef);
-const [skipAutoTuning] = program.processedArgs;
+const [skipAutoTuning] = program.processedArgs as [boolean];
 
 client.whenReady().then(async () => {
   const status = await lastValueFrom(client.request.startCoggingTorqueRecording({ ...deviceRefObj, skipAutoTuning }, requestTimeout, messageId));

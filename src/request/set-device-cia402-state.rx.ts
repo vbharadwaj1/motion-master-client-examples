@@ -13,7 +13,7 @@ program.parse();
 
 const { deviceRef, requestTimeout = 5000, messageId } = program.opts();
 const deviceRefObj = makeDeviceRefObj(deviceRef);
-const [state] = program.processedArgs;
+const [state] = program.processedArgs as [MotionMasterMessage.Status.DeviceCiA402State.State];
 
 client.onceReady$.pipe(
   mergeMap(() => client.request.setDeviceCia402State({ ...deviceRefObj, state }, requestTimeout, messageId)),

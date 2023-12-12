@@ -13,7 +13,7 @@ program.parse();
 
 const { deviceRef, requestTimeout = 10000, messageId } = program.opts();
 const deviceRefObj = makeDeviceRefObj(deviceRef);
-const [state] = program.processedArgs;
+const [state] = program.processedArgs as [MotionMasterMessage.Status.EthercatNetworkState.State];
 
 client.whenReady().then(async () => {
   const status = await firstValueFrom(client.request.setEthercatNetworkState({ ...deviceRefObj, state }, requestTimeout, messageId));

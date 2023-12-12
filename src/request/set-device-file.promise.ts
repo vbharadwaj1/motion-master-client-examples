@@ -17,7 +17,7 @@ program.parse();
 
 const { deviceRef, requestTimeout = 5000, messageId } = program.opts();
 const deviceRefObj = makeDeviceRefObj(deviceRef);
-const [name, path, overwrite] = program.processedArgs;
+const [name, path, overwrite] = program.processedArgs as [string, string, boolean];
 
 const content = Buffer.from(readFileSync(path, { encoding: 'utf-8' }), 'utf-8');
 
