@@ -6,7 +6,7 @@ This repository provides TypeScript/JavaScript examples for interacting with Syn
 
 Clone this repository and install its dependencies:
 
-```sh
+```console
 git clone https://github.com/synapticon/motion-master-client-examples.git
 cd motion-master-client-examples
 npm install
@@ -14,7 +14,7 @@ npm install
 
 To transpile from TypeScript to JavaScript, use the following command:
 
-```sh
+```console
 npm run build
 ```
 
@@ -40,7 +40,7 @@ ROARR_LOG=true
 
 Alternatively, you can run TypeScript files directly without transpiling using `ts-node`:
 
-```sh
+```console
 npx ts-node ./src/request/get-devices.rx.ts
 ```
 
@@ -48,7 +48,7 @@ npx ts-node ./src/request/get-devices.rx.ts
 
 All commands associated with a specific device require the `--device-ref` option, along with other specific arguments. To view detailed help documentation for any command, use the `--help` option. For example:
 
-```sh
+```console
 ❯ npx ts-node ./src/request/upload.ts --help
 Usage: upload [options] <index> <subindex> [loadFromCache]
 
@@ -66,7 +66,7 @@ Options:
 
 Here is an example of how to read the drive temperature:
 
-```sh
+```console
 npx ts-node ./src/request/upload.ts --device-ref=1 0x2031 0x01
 ```
 
@@ -74,7 +74,7 @@ npx ts-node ./src/request/upload.ts --device-ref=1 0x2031 0x01
 
 To monitor output data and save it to both stdout and a file (data.csv), use:
 
-```sh
+```console
 node ./dist/start-monitoring.js --device-ref=1 | tee data.csv
 ```
 
@@ -82,6 +82,6 @@ node ./dist/start-monitoring.js --device-ref=1 | tee data.csv
 
 To watch `.ts` files for changes and automatically transpile, use:
 
-```sh
+```console
 npm run watch
 ```
