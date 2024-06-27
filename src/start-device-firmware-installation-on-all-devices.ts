@@ -1,7 +1,13 @@
+// This script will first resolve the firmware packages for each device and then install them.
+// Prerequisite steps:
+// 1. Visit https://bundles.synapticon.com and download a firmware bundle, e.g., somanet-motion-drive_v5.1.4.odbx.
+// 2. Rename the downloaded file from somanet-motion-drive_v5.1.4.odbx to somanet-motion-drive_v5.1.4.tar.gz and unpack it.
+// 3. Copy the contents of `somanet-motion-drive_v5.1.4/cache/s3/synapticon/oblac-drives/brands/a7e925fa-57b7-4741-9126-0840a63cdb71/packages` to the ./tmp/ directory.
+// 4. Run the script with: `node ./dist/start-device-firmware-installation-on-all-devices.js`.
+
 import { client } from "./init-client";
 import { readdirSync, readFileSync } from 'fs';
-import { DeviceFirmwareInstallationStatus, isHardwareDescriptionCompatibleWithPackageFilename } from "motion-master-client";
-import { Device } from "motion-master-client/src/lib/device";
+import { Device, DeviceFirmwareInstallationStatus, isHardwareDescriptionCompatibleWithPackageFilename } from "motion-master-client";
 import { join } from 'path';
 import { firstValueFrom, combineLatest } from "rxjs";
 
