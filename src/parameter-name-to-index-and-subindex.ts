@@ -1,8 +1,15 @@
+import { program } from 'commander';
 import { client } from './init-client';
+import { makeDeviceRefObj } from 'motion-master-client';
 import { mergeMap } from 'rxjs';
 
+program.parse();
+
+const { deviceRef } = program.opts();
+const deviceRefObj = makeDeviceRefObj(deviceRef);
+
 client.onceReady$.pipe(
-  mergeMap(() => client.request.getDeviceParameters({ devicePosition: 0, loadFromCache: true, sendProgress: false })),
+  mergeMap(() => client.request.getDeviceParameters({ ...deviceRefObj, loadFromCache: true, sendProgress: false })),
 ).subscribe({
   next: (status) => {
     const obj = status.parameters.reduce((acc, parameter) => {
