@@ -38,7 +38,7 @@ MOTION_MASTER_HOSTNAME=192.168.1.112
 ROARR_LOG=true
 ```
 
-Alternatively, you can run TypeScript scripts directly without transpiling using `ts-node`:
+Alternatively, you can run TypeScript files directly without transpiling using `ts-node`:
 
 ```sh
 ts-node src/get-devices.rx.ts
