@@ -4,6 +4,14 @@ This repository provides TypeScript/JavaScript examples for interacting with Syn
 
 ## Building
 
+Clone this repository and install its dependencies:
+
+```sh
+git clone https://github.com/synapticon/motion-master-client-examples.git
+cd motion-master-client-examples
+npm install
+```
+
 To transpile from TypeScript to JavaScript, use the following command:
 
 ```sh
