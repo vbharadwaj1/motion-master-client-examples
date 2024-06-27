@@ -1,6 +1,6 @@
 # Motion Master Client Examples
 
-This repository provides TypeScript/JavaScript examples for interacting with Synapticon's Motion Master server application to configure and control SOMANET devices.
+This repository provides JavaScript/TypeScript examples for interacting with Synapticon's Motion Master server application to configure and control SOMANET devices.
 
 ## Building
 
