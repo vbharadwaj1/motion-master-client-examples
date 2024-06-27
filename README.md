@@ -24,8 +24,6 @@ The resulting JavaScript files will be located in the `dist/` folder.
 
 Before executing any scripts, ensure to set the `MOTION_MASTER_HOSTNAME` environment variable. For example, if the Motion Master process runs at `192.168.1.112`, you have two options:
 
-Before executing a script, you must set the `MOTION_MASTER_HOSTNAME` environment variable. Let's say the Motion Master process runs at `192.168.1.112`, there are at least two ways to do it:
-
 1. Create a `.env` file in the repository root with `MOTION_MASTER_HOSTNAME=192.168.1.112`.
 2. Run a script directly by setting the variable inline: `MOTION_MASTER_HOSTNAME=192.168.1.112 node dist/get-devices.rx.js`.
 
