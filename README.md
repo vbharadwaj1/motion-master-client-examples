@@ -49,7 +49,7 @@ npx ts-node ./src/request/get-devices.rx.ts
 All commands associated with a specific device require the `--device-ref` option, along with other specific arguments. To view detailed help documentation for any command, use the `--help` option. For example:
 
 ```console
-❯ npx ts-node ./src/request/upload.ts --help
+npx ts-node ./src/request/upload.ts --help
 Usage: upload [options] <index> <subindex> [loadFromCache]
 
 Arguments:
