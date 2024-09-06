@@ -1,31 +1,25 @@
 import { program } from 'commander';
 import { client } from './init-client';
-import { DataMonitoring } from 'motion-master-client';
 
 program.parse();
 
 const { deviceRef } = program.opts();
 
 client.whenReady().then(async () => {
-  const dataMonitoring = new DataMonitoring(client);
-
-  dataMonitoring.start([
+  const dataMonitoring = client.createDataMonitoring([
     [deviceRef, 0x20F0, 0],
     [deviceRef, 0x6077, 0],
-  ], 1, {
-    topic: 'run-torque-profile',
-    bufferSize: 1,
-    collect: true,
-    distinct: false,
-  }).subscribe();
+  ], 1);
+
+  dataMonitoring.start().subscribe();
 
   try {
+    await client.request.download(deviceRef, 0x2014, 1, 10); // Torque window: Value
     await client.runTorqueProfile(1, {
       amplitude: 30,
-      holdingDuration: 500,
+      holdingDuration: 1000,
       torqueSlope: 10,
       targetReachedTimeout: 5000,
-      targetWindow: 0,
     });
   } finally {
     dataMonitoring.stop();
