@@ -16,7 +16,7 @@ client.whenReady().then(async () => {
   dataMonitoring.start().subscribe();
 
   try {
-    await client.runVelocityProfile(1, {
+    await client.runVelocityProfile(deviceRef, {
       acceleration: 2000,
       amplitude: 1000,
       deceleration: 2000,
@@ -26,8 +26,8 @@ client.whenReady().then(async () => {
       window: 10,
       windowTime: 5,
     });
+    console.log(dataMonitoring.csv);
   } finally {
     dataMonitoring.stop();
-    console.log(dataMonitoring.csv);
   }
 }).finally(() => client.closeSockets());

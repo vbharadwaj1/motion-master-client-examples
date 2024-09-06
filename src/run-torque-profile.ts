@@ -14,15 +14,16 @@ client.whenReady().then(async () => {
   dataMonitoring.start().subscribe();
 
   try {
-    await client.request.download(deviceRef, 0x2014, 1, 10); // Torque window: Value
-    await client.runTorqueProfile(1, {
+    await client.runTorqueProfile(deviceRef, {
       amplitude: 30,
       holdingDuration: 1000,
       torqueSlope: 10,
       targetReachedTimeout: 5000,
+      window: 10,
+      windowTime: 5,
     });
+    console.log(dataMonitoring.csv);
   } finally {
     dataMonitoring.stop();
-    console.log(dataMonitoring.csv);
   }
 }).finally(() => client.closeSockets());
