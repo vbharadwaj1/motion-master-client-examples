@@ -13,7 +13,7 @@
   "dependencies": {
     "commander": "^12.1.0",
     "dotenv": "^16.4.5",
-    "motion-master-client": "^0.0.132",
+    "motion-master-client": "^0.0.141",
     "rxjs": "^7.8.1",
     "ws": "^8.17.1"
   },
