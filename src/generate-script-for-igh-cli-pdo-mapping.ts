@@ -30,12 +30,12 @@ client.whenReady().then(async () => {
   let n = 0;
   for (let [index, subindex, value] of data) {
     if (subindex === 0) {
-      lines.push(`ethercat download --position=${deviceRef} --type=uint32 ${index} ${subindex} 0`);
+      lines.push(`ethercat download --position=${deviceRef} --type=uint8 ${index} ${subindex} 0`);
       n = value;
     } else {
       lines.push(`ethercat download --position=${deviceRef} --type=uint32 ${index} ${subindex} ${value}`);
       if (subindex === n) {
-        lines.push(`ethercat download --position=${deviceRef} --type=uint32 ${index} 0 ${n}`);
+        lines.push(`ethercat download --position=${deviceRef} --type=uint8 ${index} 0 ${n}`);
       }
     }
   }
