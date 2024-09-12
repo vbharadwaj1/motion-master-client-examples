@@ -7,8 +7,8 @@ const { deviceRef } = program.opts();
 
 client.whenReady().then(async () => {
   await client.runVelocityProfile(deviceRef, {
+    target: 1000,
     acceleration: 2000,
-    amplitude: 1000,
     deceleration: 2000,
   });
 }).finally(() => client.closeSockets());

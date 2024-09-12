@@ -18,22 +18,22 @@ client.whenReady().then(async () => {
   try {
     await client.runVelocityProfile(deviceRef, {
       acceleration: 1000,
-      amplitude: 1000,
+      target: 1000,
       deceleration: 1000,
       holdingDuration: 2000,
       skipQuickStop: true,
-      targetReachedTimeout: 10000,
+      targetReachTimeout: 10000,
       window: 10,
       windowTime: 5,
     });
 
     await client.runVelocityProfile(deviceRef, {
       acceleration: 500,
-      amplitude: 0,
+      target: 0,
       deceleration: 500,
       holdingDuration: 500,
       skipQuickStop: true,
-      targetReachedTimeout: 10000,
+      targetReachTimeout: 10000,
       window: 10,
       windowTime: 5,
     });
