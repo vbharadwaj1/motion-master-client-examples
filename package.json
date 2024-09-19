@@ -16,10 +16,12 @@
     "ejs": "^3.1.10",
     "motion-master-client": "^0.0.154",
     "rxjs": "^7.8.1",
+    "uuid": "^10.0.0",
     "ws": "^8.17.1"
   },
   "devDependencies": {
     "@types/ejs": "^3.1.5",
+    "@types/uuid": "^10.0.0",
     "ts-node": "^10.9.2"
   }
 }
