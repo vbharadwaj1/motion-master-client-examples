@@ -2,14 +2,11 @@ import { program } from 'commander';
 import { client } from '../init-client';
 import { lastValueFrom } from 'rxjs';
 import { readFileSync } from 'fs';
-import { makeDeviceRefObj } from 'motion-master-client';
+import { makeDeviceRefObj, resolveAfter } from 'motion-master-client';
 
 program.parse();
 
 const { deviceRef } = program.opts();
-
-// Delay function
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 client.whenReady().then(async () => {
   try {
@@ -17,7 +14,7 @@ client.whenReady().then(async () => {
     const contentBuffer = readFileSync('src/internal/config.csv');
     const content = new Uint8Array(contentBuffer);
 
-    const tasks = [
+    const requests = [
       () => lastValueFrom(client.request.deleteDeviceFile({ ...deviceRefObj, name: 'config.csv' }, 10000)),
       () => lastValueFrom(client.request.getFiles(deviceRef)),
       () => lastValueFrom(client.request.setDeviceFile({ ...deviceRefObj, content, name: 'config.csv', overwrite: true }, 10000)),
@@ -32,10 +29,10 @@ client.whenReady().then(async () => {
       () => lastValueFrom(client.request.getFiles(deviceRef)),
     ];
 
-    for (const task of tasks) {
-      const result = await task(); // Await each task
-      console.log(result); // Log the result
-      await delay(1000);
+    for (const request of requests) {
+      const result = await request();
+      console.log(result);
+      await resolveAfter(1000);
     }
   } catch (err: unknown) {
     if (err instanceof Error) {
