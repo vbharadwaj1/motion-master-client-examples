@@ -7,7 +7,6 @@ import { makeDeviceRefObj, resolveAfter } from 'motion-master-client';
 program.parse();
 
 const { deviceRef } = program.opts();
-const deviceRefObj = makeDeviceRefObj(deviceRef);
 
 client.whenReady().then(async () => {
   try {
@@ -15,17 +14,17 @@ client.whenReady().then(async () => {
     const content = new Uint8Array(contentBuffer);
 
     const requests = [
-      () => lastValueFrom(client.request.deleteDeviceFile({ ...deviceRefObj, name: 'config.csv' }, 10000)),
+      () => lastValueFrom(client.request.deleteFile(deviceRef, 'config.csv')),
       () => lastValueFrom(client.request.getFiles(deviceRef)),
-      () => lastValueFrom(client.request.setDeviceFile({ ...deviceRefObj, content, name: 'config.csv', overwrite: true }, 10000)),
+      () => lastValueFrom(client.request.setFile(deviceRef, 'config.csv', content)),
       () => lastValueFrom(client.request.getDecodedFile(deviceRef, 'config.csv')),
-      () => lastValueFrom(client.request.setDeviceFile({ ...deviceRefObj, content, name: 'config.csv', overwrite: true }, 10000)),
+      () => lastValueFrom(client.request.setFile(deviceRef, 'config.csv', content)),
       () => lastValueFrom(client.request.getFiles(deviceRef)),
       () => lastValueFrom(client.request.getDecodedFile(deviceRef, 'config.csv')),
       () => lastValueFrom(client.request.loadConfig(deviceRef, content, { count: 10, delay: 500 })),
       () => lastValueFrom(client.request.getFiles(deviceRef)),
       () => lastValueFrom(client.request.getDecodedFile(deviceRef, 'config.csv')),
-      () => lastValueFrom(client.request.deleteDeviceFile({ ...deviceRefObj, name: 'config.csv' }, 10000)),
+      () => lastValueFrom(client.request.deleteFile(deviceRef, 'config.csv')),
       () => lastValueFrom(client.request.getFiles(deviceRef)),
     ];
 
