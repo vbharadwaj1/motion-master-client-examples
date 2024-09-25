@@ -6,7 +6,6 @@ import { makeDeviceRefObj, resolveAfter } from 'motion-master-client';
 program.parse();
 
 const { deviceRef } = program.opts();
-const deviceRefObj = makeDeviceRefObj(deviceRef);
 
 // Tested on firmware v5.3.0-beta.3
 // Device: Circulo 7 (8504-03)
@@ -16,7 +15,7 @@ client.whenReady().then(async () => {
   try {
     console.log('Setting the contents of the fs-buffer file...');
     const content = Uint8Array.from([65, 66, 67]);
-    await lastValueFrom(client.request.setDeviceFile({ ...deviceRefObj, name: 'fs-buffer', content }, 5000));
+    await lastValueFrom(client.request.setFile(deviceRef, 'fs-buffer', content));
     console.log('Done.');
   } catch (err: unknown) {
     if (err instanceof Error) {
