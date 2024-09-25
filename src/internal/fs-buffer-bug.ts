@@ -20,7 +20,6 @@ client.whenReady().then(async () => {
   } catch (err: unknown) {
     if (err instanceof Error) {
       console.error(`ERROR 1: ${err.message}`);
-
     }
   }
 
