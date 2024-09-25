@@ -7,10 +7,10 @@ import { makeDeviceRefObj, resolveAfter } from 'motion-master-client';
 program.parse();
 
 const { deviceRef } = program.opts();
+const deviceRefObj = makeDeviceRefObj(deviceRef);
 
 client.whenReady().then(async () => {
   try {
-    const deviceRefObj = makeDeviceRefObj(deviceRef);
     const contentBuffer = readFileSync('src/internal/config.csv');
     const content = new Uint8Array(contentBuffer);
 
