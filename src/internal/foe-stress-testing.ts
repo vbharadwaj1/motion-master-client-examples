@@ -16,6 +16,9 @@ client.whenReady().then(async () => {
     const hardwareDescriptionContentBuffer = readFileSync('src/internal/.hardware_description');
     const hardwareDescriptionContent = new Uint8Array(hardwareDescriptionContentBuffer);
 
+    const esiFileContentBuffer = readFileSync('src/internal/SOMANET_CiA_402.xml');
+    const esiFileContent = new Uint8Array(esiFileContentBuffer);
+
     const requests = [
       // () => lastValueFrom(client.request.deleteFile(deviceRef, 'config.csv')),
       () => lastValueFrom(client.request.getFiles(deviceRef)),
@@ -36,6 +39,10 @@ client.whenReady().then(async () => {
       () => lastValueFrom(client.request.getDecodedFile(deviceRef, '.hardware_description')),
       () => lastValueFrom(client.request.deleteFile(deviceRef, '.hardware_description')),
       () => lastValueFrom(client.request.getDecodedFile(deviceRef, '.hardware_description')),
+      () => lastValueFrom(client.request.getFiles(deviceRef)),
+      () => lastValueFrom(client.request.getDecodedFile(deviceRef, 'SOMANET_CiA_402.xml', 30000)),
+      () => lastValueFrom(client.request.deleteFile(deviceRef, 'SOMANET_CiA_402.xml')),
+      () => lastValueFrom(client.request.setFile(deviceRef, 'SOMANET_CiA_402.xml', esiFileContent, true, 30000)),
       () => lastValueFrom(client.request.getFiles(deviceRef)),
     ];
 
