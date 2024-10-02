@@ -7,7 +7,7 @@
 
 import { client } from "./init-client";
 import { readdirSync, readFileSync } from 'fs';
-import { Device, DeviceFirmwareInstallationStatus, isHardwareDescriptionCompatibleWithPackageFilename } from "motion-master-client";
+import { Device, DeviceFirmwareInstallationStatus, isFirmwarePackageFilenameCompatibleWithDevice } from "motion-master-client";
 import { join } from 'path';
 import { firstValueFrom, combineLatest } from "rxjs";
 
@@ -21,7 +21,7 @@ client.whenReady().then(async () => {
 
   const resolvedPackages = devices.reduce((items, { deviceAddress, hardwareDescription, id }) => {
     if (hardwareDescription) {
-      const packageFilename = packageFilenames.find((filename) => isHardwareDescriptionCompatibleWithPackageFilename(hardwareDescription, filename));
+      const packageFilename = packageFilenames.find((filename) => isFirmwarePackageFilenameCompatibleWithDevice(filename, { hardwareDescription }));
       if (packageFilename) {
         const buffer = readFileSync(join(packagesDir, packageFilename));
         items.push([deviceAddress, buffer]);
