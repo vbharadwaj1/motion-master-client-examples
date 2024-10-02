@@ -10,28 +10,42 @@ const { deviceRef } = program.opts();
 
 client.whenReady().then(async () => {
   try {
-    const contentBuffer = readFileSync('src/internal/config.csv');
-    const content = new Uint8Array(contentBuffer);
+    const configContentBuffer = readFileSync('src/internal/config.csv');
+    const configContent = new Uint8Array(configContentBuffer);
+
+    const hardwareDescriptionContentBuffer = readFileSync('src/internal/.hardware_description');
+    const hardwareDescriptionContent = new Uint8Array(hardwareDescriptionContentBuffer);
 
     const requests = [
+      // () => lastValueFrom(client.request.deleteFile(deviceRef, 'config.csv')),
+      () => lastValueFrom(client.request.getFiles(deviceRef)),
+      () => lastValueFrom(client.request.setFile(deviceRef, 'config.csv', configContent)),
+      () => lastValueFrom(client.request.getDecodedFile(deviceRef, 'config.csv')),
+      () => lastValueFrom(client.request.setFile(deviceRef, 'config.csv', configContent)),
+      () => lastValueFrom(client.request.getFiles(deviceRef)),
+      () => lastValueFrom(client.request.getDecodedFile(deviceRef, 'config.csv')),
+      () => lastValueFrom(client.request.loadConfig(deviceRef, configContent, { count: 10, delay: 500 })),
+      () => lastValueFrom(client.request.getFiles(deviceRef)),
+      () => lastValueFrom(client.request.getDecodedFile(deviceRef, 'config.csv')),
       () => lastValueFrom(client.request.deleteFile(deviceRef, 'config.csv')),
       () => lastValueFrom(client.request.getFiles(deviceRef)),
-      () => lastValueFrom(client.request.setFile(deviceRef, 'config.csv', content)),
-      () => lastValueFrom(client.request.getDecodedFile(deviceRef, 'config.csv')),
-      () => lastValueFrom(client.request.setFile(deviceRef, 'config.csv', content)),
-      () => lastValueFrom(client.request.getFiles(deviceRef)),
-      () => lastValueFrom(client.request.getDecodedFile(deviceRef, 'config.csv')),
-      () => lastValueFrom(client.request.loadConfig(deviceRef, content, { count: 10, delay: 500 })),
-      () => lastValueFrom(client.request.getFiles(deviceRef)),
-      () => lastValueFrom(client.request.getDecodedFile(deviceRef, 'config.csv')),
-      () => lastValueFrom(client.request.deleteFile(deviceRef, 'config.csv')),
+      () => lastValueFrom(client.request.getDecodedFile(deviceRef, '.hardware_description')),
+      () => lastValueFrom(client.request.unlockProtectedFiles(deviceRef)),
+      () => lastValueFrom(client.request.deleteFile(deviceRef, '.hardware_description')),
+      () => lastValueFrom(client.request.setFile(deviceRef, '.hardware_description', hardwareDescriptionContent)),
+      () => lastValueFrom(client.request.getDecodedFile(deviceRef, '.hardware_description')),
+      () => lastValueFrom(client.request.deleteFile(deviceRef, '.hardware_description')),
+      () => lastValueFrom(client.request.getDecodedFile(deviceRef, '.hardware_description')),
       () => lastValueFrom(client.request.getFiles(deviceRef)),
     ];
 
-    for (const request of requests) {
-      const result = await request();
-      console.log(result);
-      await resolveAfter(1000);
+    for (let i = 0; i < 1; i++) {
+      for (const request of requests) {
+        const result = await request();
+        console.log(result);
+        await resolveAfter(1000);
+      }
+      console.log('-------------------------------------------------------\n')
     }
   } catch (err: unknown) {
     if (err instanceof Error) {

@@ -1,0 +1,28 @@
+{
+    "fileVersion": "1.1.0",
+    "device": {
+        "macAddress": "",
+        "keyId": "",
+        "serialNumber": "9002-02-0000464-2339",
+        "name": "SOMANET Integro Motor mountable 60mm (IM60-060-060-ECMMM102STO-SAMPLE)",
+        "id": "9002",
+        "version": "02",
+        "components": [
+            {
+                "name": "SOMANET Control Module (CTM-Ixxx-060-xxx-ExMMxxxxSTO-SAMPLE)",
+                "serialNumber": "1509-02-0000874-2419",
+                "version": "B.1"
+            },
+            {
+                "name": "SOMANET Connector Module (CNM-Ixxx-060-xxx-ExxxM102STO-SAMPLE)",
+                "serialNumber": "0515-01-0000307-2418",
+                "version": "B.1"
+            },
+            {
+                "name": "SOMANET Drive Module (DRM-IM60-060-060-xxxxxxxxxxx-SAMPLE)",
+                "serialNumber": "0007-03-0001063-2418",
+                "version": "B.1"
+            }
+        ]
+    }
+}
