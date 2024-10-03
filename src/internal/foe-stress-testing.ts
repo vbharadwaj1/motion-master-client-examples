@@ -40,6 +40,7 @@ client.whenReady().then(async () => {
       () => lastValueFrom(client.request.deleteFile(deviceRef, '.hardware_description')),
       () => lastValueFrom(client.request.getDecodedFile(deviceRef, '.hardware_description')),
       () => lastValueFrom(client.request.getFiles(deviceRef)),
+      () => lastValueFrom(client.request.setFile(deviceRef, 'SOMANET_CiA_402.xml', esiFileContent, true, 30000)),
       () => lastValueFrom(client.request.getDecodedFile(deviceRef, 'SOMANET_CiA_402.xml', 30000)),
       () => lastValueFrom(client.request.deleteFile(deviceRef, 'SOMANET_CiA_402.xml')),
       () => lastValueFrom(client.request.setFile(deviceRef, 'SOMANET_CiA_402.xml', esiFileContent, true, 30000)),
