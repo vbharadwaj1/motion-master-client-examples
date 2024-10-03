@@ -20,7 +20,6 @@ client.whenReady().then(async () => {
     const esiFileContent = new Uint8Array(esiFileContentBuffer);
 
     const requests = [
-      // () => lastValueFrom(client.request.deleteFile(deviceRef, 'config.csv')),
       () => lastValueFrom(client.request.getFiles(deviceRef)),
       () => lastValueFrom(client.request.setFile(deviceRef, 'config.csv', configContent)),
       () => lastValueFrom(client.request.getDecodedFile(deviceRef, 'config.csv')),
