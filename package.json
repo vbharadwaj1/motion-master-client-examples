@@ -1,7 +1,7 @@
 {
   "name": "motion-master-client-examples",
   "version": "1.0.0",
-  "description": "",
+  "description": "This repository provides TypeScript/JavaScript examples for interacting with Synapticon's Motion Master server application to configure and control SOMANET devices.",
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
@@ -12,9 +12,12 @@
   "license": "ISC",
   "dependencies": {
     "commander": "^12.1.0",
+    "csv-parser": "^3.0.0",
+    "csv-writer": "^1.6.0",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "motion-master-client": "^0.0.178",
+    "python-shell": "^5.0.0",
     "rxjs": "^7.8.1",
     "uuid": "^10.0.0",
     "ws": "^8.17.1"
@@ -24,4 +27,22 @@
     "@types/uuid": "^10.0.0",
     "ts-node": "^10.9.2"
   }
+    "motion-master-client": "^0.0.124",
+    "python-shell": "^5.0.0",
+    "rxjs": "^7.8.1",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/synapticon/motion-master-client-examples.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/synapticon/motion-master-client-examples/issues"
+  },
+  "homepage": "https://github.com/synapticon/motion-master-client-examples#readme"
 }

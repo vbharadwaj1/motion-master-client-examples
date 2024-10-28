@@ -9,7 +9,7 @@ program.addArgument(new Argument('<parameters>', 'controller parameters'));
 program.parse();
 
 const { deviceRef, requestTimeout = 10000, messageId } = program.opts();
-const deviceRefObj = makeDeviceRefObj(deviceRef);
+const deviceRefObj = makeDeviceRefObj(1);
 const [controllerType, parameters] = program.processedArgs as [string, string];
 
 const input = { [`${controllerType}Parameters`]: JSON.parse(parameters) };
