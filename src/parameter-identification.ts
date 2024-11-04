@@ -12,14 +12,23 @@ import csvParser from 'csv-parser';
 
 
 // Extract options from the command line arguments
-const { requestTimeout = 60000, messageId } = program.opts();
+program
+  .option('--requestTimeout <number>', 'Request timeout in milliseconds', parseInt)
+  .option('--messageId <string>', 'Message ID')
+  .option('--refTorqueSensorType <number>', 'Reference torque sensor type', parseInt)
+  .option('--mass <number>', 'Mass', parseFloat)
+  .option('--length <number>', 'Length', parseFloat)
+  .option('--parameterIds <string>', 'Comma-separated parameter IDs')
+  .option('--sendProgress', 'Send progress updates', false)
+  .option('--loadFromCache', 'Load from cache', false);
+
+program.parse(process.argv);
+
+const { requestTimeout = 60000, messageId, refTorqueSensorType, mass, length, parameterIds, sendProgress, loadFromCache } = program.opts();
 
 // Define the device reference and create a device reference object
 const deviceRef = 1;
 const deviceRefObj = makeDeviceRefObj(deviceRef);
-
-// Extract additional parameters from the command line arguments
-const [parameterIds, sendProgress, loadFromCache] = program.processedArgs as [string, boolean, boolean];
 
 // Utility function to create a delay
 function delay(ms: number) {
@@ -142,7 +151,7 @@ client.whenReady().then(async () => {
     let encoder_2_resolution = String(status.parameterValues[1]["uintValue"]);
     let gearRatio = String(status.parameterValues[2]["uintValue"]);
     let ratedMotorTorquemNm = String(status.parameterValues[3]["uintValue"])
-    argument = [encoder_1_resolution, encoder_2_resolution, gearRatio, ratedMotorTorquemNm]
+    argument = [encoder_1_resolution, encoder_2_resolution, gearRatio, ratedMotorTorquemNm, refTorqueSensorType, mass, length]
   }
 
   // Define options for the Python script
@@ -157,6 +166,7 @@ client.whenReady().then(async () => {
   try {
     // Run the Python script
     result = await PythonShell.run('data_fitting.py', options);
+    console.log('Python script result:', result);
   } catch (error) {
     console.error('Promise rejected with error: ', error);
   }

@@ -15,6 +15,9 @@ def fit_data():
     encoder_1_resolution = int(args[0])
     encoder_2_resolution = int(args[1])
     rated_motor_torque_mNm = int(args[3])
+    ref_torque_sensor_type = int(args[4])
+    mass = int(args[5])
+    length = int(args[6])
 
     # Open the binary file in read-binary mode
     with open('encoder_calibration_table.bin', 'rb') as file:
@@ -62,8 +65,12 @@ def fit_data():
     X = np.transpose(np.vstack([torsion, offset, motor_speed, sign_of_speed, torque_actual_value_mNm]))
 
 
-    # Extract the target column (5th column)
-    y = df.iloc[:, 5].values
+    # Extract the target column (5th column) refrence torque sensor
+    if ref_torque_sensor_type == 1:
+        y = df.iloc[:, 5].values
+    elif ref_torque_sensor_type == 2:
+        encoder_1_rad = np.mod(encoder_1_ticks, encoder_1_resolution) * 2 * np.pi / encoder_1_resolution
+        y = mass * length * np.sin(encoder_1_rad) * 9.81
 
     # Perform least squares fitting
     coefficients, residuals, rank, s = lstsq(X, y, rcond=None)
