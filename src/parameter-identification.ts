@@ -16,15 +16,14 @@ program
   .option('--requestTimeout <number>', 'Request timeout in milliseconds', parseInt)
   .option('--messageId <string>', 'Message ID')
   .option('--refTorqueSensorType <number>', 'Reference torque sensor type', parseInt)
-  .option('--mass <number>', 'Mass', parseFloat)
-  .option('--length <number>', 'Length', parseFloat)
+  .option('--maxTorquemNm <number>', 'max Torque mNm', parseFloat)
   .option('--parameterIds <string>', 'Comma-separated parameter IDs')
   .option('--sendProgress', 'Send progress updates', false)
   .option('--loadFromCache', 'Load from cache', false);
 
 program.parse(process.argv);
 
-const { requestTimeout = 60000, messageId, refTorqueSensorType, mass, length, parameterIds, sendProgress, loadFromCache } = program.opts();
+const { requestTimeout = 60000, messageId, refTorqueSensorType, maxTorquemNm, parameterIds, sendProgress, loadFromCache } = program.opts();
 
 // Define the device reference and create a device reference object
 const deviceRef = 1;
@@ -44,10 +43,10 @@ const csvWriter = createCsvWriter({
   header: [
       { id: 'timestamp', title: 'TIMESTAMP' },
       { id: 'encoder1', title: 'ENCODER 1 TICKS' },
-      { id: 'encoder2', title: 'ENCODER 2 TICKS' },
       { id: 'MotorVel', title: 'MOTOR VELOCITY mRPM' },
       { id: 'TorqueAct', title: 'TORQUE ACTUAL (%%)' },
-      { id: 'RefTorque', title: 'Ref Torque [mNm]' }
+      { id: 'RefTorque', title: 'Ref Torque [mNm]' },
+      { id: 'Torsion', title: 'TORSION' },
   ]
 });
 
@@ -64,10 +63,10 @@ process.on('SIGINT', function () {
 const ids: [number, number, number][] = [
   [deviceRef, 0x20F0, 0], // Timestamp
   [deviceRef, 0x2111, 2], // Encoder 1 adjusted position
-  [deviceRef, 0x2113, 2], // Encoder 2 adjusted position
   [deviceRef, 0x2113, 3], // Motor velocity
   [deviceRef, 0x6077, 0], // Motor torque actual value
   [deviceRef, 0x2038, 1], // External scaled measurement
+  [deviceRef, 0x2151, 0], // Torsion
 ];
 
 // Create parameter names from IDs
@@ -77,16 +76,16 @@ const names = ids.map(([, index, subindex]) => makeParameterId(index, subindex))
 subscription = client.onceReady$.pipe(
   mergeMap(() => client.startMonitoring(ids, 1000)),
 ).subscribe((values) => {
-  csvWriter.writeRecords([{ timestamp: values[0], encoder1: values[1], encoder2 : values[2],
-                            MotorVel: values[3], TorqueAct: values[4], RefTorque : values[5]
+  csvWriter.writeRecords([{ timestamp: values[0], encoder1: values[1],
+                            MotorVel: values[2], TorqueAct: 0, RefTorque : values[4], Torsion : values[5]
    }] );
 });
 
 let modeOfOperation = 3; // profile velocity mode
-let targetVelocityArray = [500]; // mRpm
-let time_of_one_revolution_s = 0;
-let number_of_rotation = 0.1;
-let waitTime = 0; time_of_one_revolution_s * number_of_rotation;
+let targetVelocityArray = [500, 1000, 2000, 5000, 7500, 10000]; // mRpm
+let time_of_one_revolution_ms = 0;
+let number_of_rotation = 0.25;
+let waitTime = 0;
 
 client.whenReady().then(async () => {
   // Reset the targets for the device
@@ -103,9 +102,9 @@ client.whenReady().then(async () => {
 
   // Iterate over the target velocities and apply them
   for (var targetVelocity of targetVelocityArray) {
-    time_of_one_revolution_s = (60 / (targetVelocity)) * 1000 * 1000;
-    waitTime = time_of_one_revolution_s * number_of_rotation;
-
+    time_of_one_revolution_ms = (60 / (targetVelocity)) * 1000 * 1000;
+    waitTime = time_of_one_revolution_ms * number_of_rotation;
+    console.log(waitTime)
     // Set the target velocity
     await client.request.downloadMany([
         [deviceRef, 0x60FF, 0, targetVelocity]
@@ -117,6 +116,13 @@ client.whenReady().then(async () => {
     // Set the target velocity to the negative value
     await client.request.downloadMany([
         [deviceRef, 0x60FF, 0, -targetVelocity]
+    ]);
+
+    // Wait for the specified time
+    await delay(2 * waitTime);
+
+    await client.request.downloadMany([
+      [deviceRef, 0x60FF, 0, targetVelocity]
     ]);
 
     // Wait for the specified time
@@ -132,7 +138,7 @@ client.whenReady().then(async () => {
   await client.request.transitionToCia402State(deviceRef, Cia402State.SWITCH_ON_DISABLED);
 
   // Define the parameter IDs to be fetched
-  let parameterIds = "0x2110:03, 0x2112:03, 0x6091:01, 0x6076:00";
+  let parameterIds = "0x2110:03, 0x6076:00 , 0x6091:01, 0x6091:02";
 
   // Split the parameter IDs and create the parameters array
   const parameters = parameterIds.split(',').reduce((arr, parameterId) => {
@@ -145,13 +151,13 @@ client.whenReady().then(async () => {
   const status = await lastValueFrom(client.request.getDeviceParameterValues({ ...deviceRefObj, parameters, sendProgress }, requestTimeout, messageId));
 
   // Prepare arguments for the Python script
-  let argument = ['0', '0', '0', '0'];
+  let argument = ['0', '0'];
   if (status.parameterValues?.length) {
     let encoder_1_resolution = String(status.parameterValues[0]["uintValue"]);
-    let encoder_2_resolution = String(status.parameterValues[1]["uintValue"]);
-    let gearRatio = String(status.parameterValues[2]["uintValue"]);
-    let ratedMotorTorquemNm = String(status.parameterValues[3]["uintValue"])
-    argument = [encoder_1_resolution, encoder_2_resolution, gearRatio, ratedMotorTorquemNm, refTorqueSensorType, mass, length]
+    let ratedMotorTorquemNm = String(status.parameterValues[1]["uintValue"]);
+    let motorRevolutions = String(status.parameterValues[2]["uintValue"]);
+    let gearRevolution = String(status.parameterValues[3]["uintValue"]);
+    argument = [encoder_1_resolution, ratedMotorTorquemNm, refTorqueSensorType, maxTorquemNm, motorRevolutions, gearRevolution];
   }
 
   // Define options for the Python script

@@ -52,7 +52,7 @@ subscription = client.onceReady$.pipe(
 });
 
 let modeOfOperation = 3; // profile velocity mode
-let targetVelocity = 2000; // mRpm
+let targetVelocity = 500; // mRpm
 let time_of_one_revolution_s = (60 / (Math.abs(targetVelocity)) * 1000 * 1000);
 let number_of_rotation = 1.5;
 let waitTime = time_of_one_revolution_s * number_of_rotation;
