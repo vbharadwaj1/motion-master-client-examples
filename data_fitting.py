@@ -10,7 +10,6 @@ def fit_data():
 
 
     args = sys.argv[1:]
-    data = pd.read_csv('output.csv')
     encoder_1_resolution = int(args[0])
     rated_motor_torque_mNm = int(args[1])
     ref_torque_sensor_type = int(args[2])
@@ -25,10 +24,9 @@ def fit_data():
     # Extract input columns (1 -> 4 columns)
     encoder_1_ticks = df.iloc[:, 1].values
 
-    torsion = df.iloc[:, 5].values
-
-    motor_speed = df.iloc[:, 2].values / gear_ratio
+    motor_speed = df.iloc[:, 2].values
     torque_actual_value_mNm = (df.iloc[:, 3].values * rated_motor_torque_mNm / 1000)
+    torsion = df.iloc[:, 5].values
 
     # Sign of Speed
     sign_of_speed = motor_speed
@@ -36,17 +34,14 @@ def fit_data():
     sign_of_speed[sign_of_speed > 1000] = 1
     sign_of_speed[sign_of_speed < -1000] = -1
 
-
     offset = np.ones((torsion.shape[0], ))
     # Add a column of ones to X to account for the intercept term
     X = np.transpose(np.vstack([torsion, offset, motor_speed, sign_of_speed, torque_actual_value_mNm]))
-
 
     # Extract the target column (5th column) refrence torque sensor
     if ref_torque_sensor_type == 1:
         y = df.iloc[:, 4].values
     elif ref_torque_sensor_type == 2:
-        print('here')
         encoder_1_ticks = encoder_1_ticks - encoder_1_ticks[0];
         encoder_1_rad = np.mod(encoder_1_ticks, encoder_1_resolution) * 2 * np.pi / encoder_1_resolution
         y = max_torque_mNm * np.sin(encoder_1_rad)
@@ -62,8 +57,8 @@ def fit_data():
 
     plt.figure(figsize=(15, 15))
 
-    plt.plot(y, label='Reference_torque')
     plt.plot(estimated_torque_mNm, label='Estimated_torque')
+    plt.plot(y, label='Reference_torque', color='red')
     plt.title('Reference Torque vs Estimated Torque')
     plt.xlabel('No. of points')
     plt.ylabel('Torque (mNm)')

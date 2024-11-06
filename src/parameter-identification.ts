@@ -13,11 +13,11 @@ import csvParser from 'csv-parser';
 
 // Extract options from the command line arguments
 program
-  .option('--requestTimeout <number>', 'Request timeout in milliseconds', parseInt)
-  .option('--messageId <string>', 'Message ID')
-  .option('--refTorqueSensorType <number>', 'Reference torque sensor type', parseInt)
-  .option('--maxTorquemNm <number>', 'max Torque mNm', parseFloat)
-  .option('--parameterIds <string>', 'Comma-separated parameter IDs')
+  .option('--requestTimeout <number>', 'Request timeout in milliseconds', parseInt, 60000)
+  .option('--messageId <string>', 'Message ID', '')
+  .option('--refTorqueSensorType <number>', 'Reference torque sensor type', parseInt, 0)
+  .option('--maxTorquemNm <number>', 'max Torque mNm', parseFloat, 0)
+  .option('--parameterIds <string>', 'Comma-separated parameter IDs', '')
   .option('--sendProgress', 'Send progress updates', false)
   .option('--loadFromCache', 'Load from cache', false);
 
@@ -77,7 +77,7 @@ subscription = client.onceReady$.pipe(
   mergeMap(() => client.startMonitoring(ids, 1000)),
 ).subscribe((values) => {
   csvWriter.writeRecords([{ timestamp: values[0], encoder1: values[1],
-                            MotorVel: values[2], TorqueAct: 0, RefTorque : values[4], Torsion : values[5]
+                            MotorVel: values[2], TorqueAct: values[3], RefTorque : values[4], Torsion : values[5]
    }] );
 });
 
